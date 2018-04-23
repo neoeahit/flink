@@ -88,7 +88,9 @@ public class TaskManagerComponentsStartupShutdownTest extends TestLogger {
 
 		ActorSystem actorSystem = null;
 
-		HighAvailabilityServices highAvailabilityServices = new EmbeddedHaServices(TestingUtils.defaultExecutor());
+		HighAvailabilityServices highAvailabilityServices = new EmbeddedHaServices(
+			new Configuration(),
+			TestingUtils.defaultExecutor());
 
 		ActorRef jobManager = null;
 		ActorRef taskManager = null;

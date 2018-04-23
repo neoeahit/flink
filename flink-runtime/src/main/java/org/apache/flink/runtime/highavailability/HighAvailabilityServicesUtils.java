@@ -53,7 +53,7 @@ public class HighAvailabilityServicesUtils {
 
 		switch (highAvailabilityMode) {
 			case NONE:
-				return new EmbeddedHaServices(executor);
+				return new EmbeddedHaServices(config, executor);
 
 			case ZOOKEEPER:
 				BlobStoreService blobStoreService = BlobUtils.createBlobStoreFromConfig(config);
@@ -107,6 +107,7 @@ public class HighAvailabilityServicesUtils {
 				final String protocol = enableSSL ? "https://" : "http://";
 
 				return new StandaloneHaServices(
+					configuration,
 					resourceManagerRpcUrl,
 					dispatcherRpcUrl,
 					jobManagerRpcUrl,

@@ -63,7 +63,9 @@ public class TaskManagerMetricsTest extends TestLogger {
 	public void testMetricRegistryLifeCycle() throws Exception {
 		ActorSystem actorSystem = null;
 
-		HighAvailabilityServices highAvailabilityServices = new EmbeddedHaServices(TestingUtils.defaultExecutor());
+		HighAvailabilityServices highAvailabilityServices = new EmbeddedHaServices(
+			new Configuration(),
+			TestingUtils.defaultExecutor());
 
 		final MetricRegistryImpl metricRegistry = new MetricRegistryImpl(
 			MetricRegistryConfiguration.fromConfiguration(new Configuration()));

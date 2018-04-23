@@ -91,6 +91,24 @@ public class HighAvailabilityOptions {
 			.withDescription("The time before a JobManager after a fail over recovers the current jobs.");
 
 	// ------------------------------------------------------------------------
+	//  Standalone Options
+	// ------------------------------------------------------------------------
+
+	/**
+	 * The CheckpointRecoveryFactory class to use, when running Flink in a standalone mode.
+	 */
+	public static final ConfigOption<String> HA_STANDALONE_CHECKPOINT_RECOVERY_FACTORY_CLASS =
+		key("high-availability.standalone.checkpoint-recovery-factory.class")
+		.noDefaultValue()
+		.withDescription("The CheckpointRecoveryFactory class to use, when running Flink in a standalone mode.");
+
+	public static final ConfigOption<String> HA_STANDALONE_CHECKPOINT_RECOVERY_FACTORY_CONFIG_PARAMETER =
+		key("high-availability.standalone.checkpoint-recovery-factory.<parameter>")
+			.noDefaultValue()
+			.withDescription("Configures the parameter <parameter> for the CheckpointRecoveryFactory class to use, " +
+				"when running Flink in a standalone mode.");
+
+	// ------------------------------------------------------------------------
 	//  ZooKeeper Options
 	// ------------------------------------------------------------------------
 

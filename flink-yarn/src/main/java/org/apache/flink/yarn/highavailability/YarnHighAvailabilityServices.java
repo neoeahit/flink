@@ -78,6 +78,9 @@ public abstract class YarnHighAvailabilityServices implements HighAvailabilitySe
 	/** The lock that guards all accesses to methods in this class. */
 	private final ReentrantLock lock;
 
+	/** The Flink configuration of this component / process. */
+	protected final Configuration config;
+
 	/** The Flink FileSystem object that represent the HDFS used by YARN. */
 	protected final FileSystem flinkFileSystem;
 
@@ -120,6 +123,7 @@ public abstract class YarnHighAvailabilityServices implements HighAvailabilitySe
 		checkNotNull(hadoopConf);
 
 		this.lock = new ReentrantLock();
+		this.config = config;
 
 		// get and verify the YARN HDFS URI
 		final URI fsUri = org.apache.hadoop.fs.FileSystem.getDefaultUri(hadoopConf);

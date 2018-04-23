@@ -19,6 +19,7 @@
 package org.apache.flink.runtime.highavailability.nonha.embedded;
 
 import org.apache.flink.api.common.JobID;
+import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.concurrent.Executors;
 import org.apache.flink.runtime.leaderelection.LeaderContender;
 import org.apache.flink.runtime.leaderelection.LeaderElectionService;
@@ -49,7 +50,9 @@ public class EmbeddedHaServicesTest extends TestLogger {
 
 	@Before
 	public void setupTest() {
-		embeddedHaServices = new EmbeddedHaServices(Executors.directExecutor());
+		embeddedHaServices = new EmbeddedHaServices(
+			new Configuration(),
+			Executors.directExecutor());
 	}
 
 	@After

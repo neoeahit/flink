@@ -73,7 +73,7 @@ ImplicitSender with WordSpecLike with Matchers with BeforeAndAfterAll with Befor
   }
 
   override def beforeEach(): Unit = {
-    highAvailabilityServices = new EmbeddedHaServices(executor)
+    highAvailabilityServices = new EmbeddedHaServices(new Configuration(), executor)
   }
 
   override def afterEach(): Unit = {

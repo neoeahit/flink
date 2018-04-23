@@ -19,12 +19,15 @@
 package org.apache.flink.runtime.highavailability.nonha.standalone;
 
 import org.apache.flink.api.common.JobID;
+import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
 import org.apache.flink.runtime.highavailability.nonha.AbstractNonHaServices;
 import org.apache.flink.runtime.leaderelection.LeaderElectionService;
 import org.apache.flink.runtime.leaderelection.StandaloneLeaderElectionService;
 import org.apache.flink.runtime.leaderretrieval.LeaderRetrievalService;
 import org.apache.flink.runtime.leaderretrieval.StandaloneLeaderRetrievalService;
+
+import java.util.concurrent.Executor;
 
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
@@ -60,10 +63,12 @@ public class StandaloneHaServices extends AbstractNonHaServices {
 	 * @param webMonitorAddress
 	 */
 	public StandaloneHaServices(
+			Configuration config,
 			String resourceManagerAddress,
 			String dispatcherAddress,
 			String jobManagerAddress,
 			String webMonitorAddress) {
+		super(config);
 		this.resourceManagerAddress = checkNotNull(resourceManagerAddress, "resourceManagerAddress");
 		this.dispatcherAddress = checkNotNull(dispatcherAddress, "dispatcherAddress");
 		this.jobManagerAddress = checkNotNull(jobManagerAddress, "jobManagerAddress");

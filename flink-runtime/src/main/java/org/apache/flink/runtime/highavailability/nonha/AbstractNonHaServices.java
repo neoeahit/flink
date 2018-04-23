@@ -18,19 +18,24 @@
 
 package org.apache.flink.runtime.highavailability.nonha;
 
+import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.blob.BlobStore;
 import org.apache.flink.runtime.blob.VoidBlobStore;
 import org.apache.flink.runtime.checkpoint.CheckpointRecoveryFactory;
+import org.apache.flink.runtime.checkpoint.ConfigurableCheckpointRecoveryFactoryLoader;
 import org.apache.flink.runtime.checkpoint.StandaloneCheckpointRecoveryFactory;
 import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
 import org.apache.flink.runtime.highavailability.RunningJobsRegistry;
 import org.apache.flink.runtime.highavailability.nonha.standalone.StandaloneRunningJobsRegistry;
 import org.apache.flink.runtime.jobmanager.StandaloneSubmittedJobGraphStore;
 import org.apache.flink.runtime.jobmanager.SubmittedJobGraphStore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.concurrent.GuardedBy;
 import java.io.IOException;
 
+import static org.apache.flink.util.Preconditions.checkNotNull;
 import static org.apache.flink.util.Preconditions.checkState;
 
 /**
@@ -40,7 +45,16 @@ import static org.apache.flink.util.Preconditions.checkState;
  * job graph store, the running jobs registry and the blob store.
  */
 public abstract class AbstractNonHaServices implements HighAvailabilityServices {
+
+	/** Logger for these services, shared with subclasses. */
+	protected static final Logger LOG = LoggerFactory.getLogger(AbstractNonHaServices.class);
+
+	// ------------------------------------------------------------------------
+
 	protected final Object lock = new Object();
+
+	/** The Flink configuration of this component / process. */
+	protected final Configuration config;
 
 	private final RunningJobsRegistry runningJobsRegistry;
 
@@ -48,7 +62,8 @@ public abstract class AbstractNonHaServices implements HighAvailabilityServices 
 
 	private boolean shutdown;
 
-	public AbstractNonHaServices() {
+	public AbstractNonHaServices(Configuration config) {
+		this.config = checkNotNull(config);
 		this.runningJobsRegistry = new StandaloneRunningJobsRegistry();
 		this.voidBlobStore = new VoidBlobStore();
 
@@ -64,7 +79,13 @@ public abstract class AbstractNonHaServices implements HighAvailabilityServices 
 		synchronized (lock) {
 			checkNotShutdown();
 
-			return new StandaloneCheckpointRecoveryFactory();
+			try {
+				return ConfigurableCheckpointRecoveryFactoryLoader.loadConfigurableCheckpointRecoveryFactoryFromConfig(config);
+			} catch (Throwable e) {
+				LOG.error("Failed to instantiate a ConfigurableCheckpointRecoveryFactory; " +
+					"defaulting to StandaloneCheckpointRecoveryFactory.", e);
+				return new StandaloneCheckpointRecoveryFactory();
+			}
 		}
 	}
 

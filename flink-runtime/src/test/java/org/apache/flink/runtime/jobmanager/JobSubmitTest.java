@@ -87,7 +87,9 @@ public class JobSubmitTest {
 		scala.Option<Tuple2<String, Object>> listeningAddress = scala.Option.apply(new Tuple2<String, Object>("localhost", port));
 		jobManagerSystem = AkkaUtils.createActorSystem(jmConfig, listeningAddress);
 
-		highAvailabilityServices = new EmbeddedHaServices(TestingUtils.defaultExecutor());
+		highAvailabilityServices = new EmbeddedHaServices(
+			new Configuration(),
+			TestingUtils.defaultExecutor());
 
 		// only start JobManager (no ResourceManager)
 		JobManager.startJobManagerActors(

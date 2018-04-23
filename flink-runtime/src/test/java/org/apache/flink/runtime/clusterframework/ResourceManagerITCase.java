@@ -74,7 +74,9 @@ public class ResourceManagerITCase extends TestLogger {
 
 	@Before
 	public void setupTest() {
-		highAvailabilityServices = new EmbeddedHaServices(TestingUtils.defaultExecutor());
+		highAvailabilityServices = new EmbeddedHaServices(
+			new Configuration(),
+			TestingUtils.defaultExecutor());
 	}
 
 	@After

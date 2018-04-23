@@ -19,6 +19,7 @@
 package org.apache.flink.runtime.highavailability.nonha.embedded;
 
 import org.apache.flink.api.common.JobID;
+import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
 import org.apache.flink.runtime.highavailability.nonha.AbstractNonHaServices;
 import org.apache.flink.runtime.leaderelection.LeaderElectionService;
@@ -52,7 +53,8 @@ public class EmbeddedHaServices extends AbstractNonHaServices {
 
 	private final EmbeddedLeaderService webMonitorLeaderService;
 
-	public EmbeddedHaServices(Executor executor) {
+	public EmbeddedHaServices(Configuration config, Executor executor) {
+		super(config);
 		this.executor = Preconditions.checkNotNull(executor);
 		this.resourceManagerLeaderService = new EmbeddedLeaderService(executor);
 		this.dispatcherLeaderService = new EmbeddedLeaderService(executor);

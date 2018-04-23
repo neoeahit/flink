@@ -20,6 +20,7 @@ package org.apache.flink.yarn.highavailability;
 
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.checkpoint.CheckpointRecoveryFactory;
+import org.apache.flink.runtime.checkpoint.ConfigurableCheckpointRecoveryFactoryLoader;
 import org.apache.flink.runtime.checkpoint.StandaloneCheckpointRecoveryFactory;
 import org.apache.flink.runtime.highavailability.FsNegativeRunningJobsRegistry;
 import org.apache.flink.runtime.highavailability.RunningJobsRegistry;
@@ -79,9 +80,12 @@ public abstract class AbstractYarnNonHaServices extends YarnHighAvailabilityServ
 	public CheckpointRecoveryFactory getCheckpointRecoveryFactory() {
 		enter();
 		try {
+			return ConfigurableCheckpointRecoveryFactoryLoader.loadConfigurableCheckpointRecoveryFactoryFromConfig(config);
+		} catch (Throwable e) {
+			LOG.error("Failed to instantiate a ConfigurableCheckpointRecoveryFactory; " +
+				"defaulting to StandaloneCheckpointRecoveryFactory.", e);
 			return new StandaloneCheckpointRecoveryFactory();
-		}
-		finally {
+		} finally {
 			exit();
 		}
 	}

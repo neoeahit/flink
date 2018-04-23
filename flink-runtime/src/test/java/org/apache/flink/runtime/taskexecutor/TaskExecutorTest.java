@@ -535,6 +535,7 @@ public class TaskExecutorTest extends TestLogger {
 		rpc.registerGateway(resourceManagerAddress, rmGateway);
 
 		StandaloneHaServices haServices = new StandaloneHaServices(
+			new Configuration(),
 			resourceManagerAddress,
 			dispatcherAddress,
 			jobManagerAddress,

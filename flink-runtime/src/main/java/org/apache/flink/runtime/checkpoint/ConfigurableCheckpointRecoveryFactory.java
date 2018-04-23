@@ -15,31 +15,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.apache.flink.runtime.checkpoint;
 
-import org.apache.flink.api.common.JobID;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.runtime.jobmanager.HighAvailabilityMode;
 
 /**
- * {@link CheckpointCoordinator} components in {@link HighAvailabilityMode#NONE}.
+ * A factory for per Job checkpoint recovery components that can be configured with a {@link Configuration}
+ * when running Flink in a standalone mode.
+ *
+ * <p>A ConfigurableCheckpointRecoveryFactory is instantiated via reflection and must be public, non-abstract,
+ * and have a public no-argument constructor.</p>
  */
-public class StandaloneCheckpointRecoveryFactory implements ConfigurableCheckpointRecoveryFactory {
+public interface ConfigurableCheckpointRecoveryFactory extends CheckpointRecoveryFactory {
 
-	@Override
-	public void configure(Configuration config) {}
-
-	@Override
-	public CompletedCheckpointStore createCheckpointStore(JobID jobId, int maxNumberOfCheckpointsToRetain, ClassLoader userClassLoader)
-			throws Exception {
-
-		return new StandaloneCompletedCheckpointStore(maxNumberOfCheckpointsToRetain);
-	}
-
-	@Override
-	public CheckpointIDCounter createCheckpointIDCounter(JobID ignored) {
-		return new StandaloneCheckpointIDCounter();
-	}
+	/**
+	 * Configures the {@link ConfigurableCheckpointRecoveryFactory} when running Flink in a standalone mode.
+	 *
+	 * @param config A {@link Configuration} object that contains all the parameters prefixed
+	 *                  with "high-availability.standalone.checkpoint-recovery-factory"
+	 */
+	void configure(Configuration config);
 
 }

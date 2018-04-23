@@ -133,7 +133,9 @@ public class TaskManagerRegistrationTest extends TestLogger {
 			EmbeddedHaServices embeddedHaServices = null;
 
 			try {
-				embeddedHaServices = new EmbeddedHaServices(Executors.directExecutor());
+				embeddedHaServices = new EmbeddedHaServices(
+					new Configuration(),
+					Executors.directExecutor());
 
 				// a simple JobManager
 				jobManager = TestingUtils.createJobManager(
@@ -208,7 +210,9 @@ public class TaskManagerRegistrationTest extends TestLogger {
 
 			FiniteDuration delayedTimeout = timeout.$times(3L);
 
-			final EmbeddedHaServices embeddedHaServices = new EmbeddedHaServices(Executors.directExecutor());
+			final EmbeddedHaServices embeddedHaServices = new EmbeddedHaServices(
+				new Configuration(),
+				Executors.directExecutor());
 
 			try {
 				// start a TaskManager that tries to register at the JobManager before the JobManager is
